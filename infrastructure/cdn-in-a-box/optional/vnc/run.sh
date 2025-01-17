@@ -58,6 +58,6 @@ else
    sleep 1
 fi
 
-su -c "vncserver :$VNC_INSTANCE_NUM -depth $VNC_DEPTH -geometry $VNC_RESOLUTION" - "$VNC_USER" 
-
+sed -i '190,190{s/^/# /}' /usr/bin/vncserver
+su -c "vncserver :$VNC_INSTANCE_NUM -depth $VNC_DEPTH -geometry $VNC_RESOLUTION -rfbport 5909 -rfbauth '.vnc/passwd'"
 tail -F -- /home/ciabuser/.vnc/vnc*:9.log

@@ -54,7 +54,7 @@ services:
     environment:
       VNC_USER: "ciabuser"
       VNC_DEPTH: 32
-      VNC_RESOLUTION: "1400x900"
+      VNC_RESOLUTION: "1920x1080"
       VNC_PASSWD: "twelve12"
     env_file: 
       - variables.env
