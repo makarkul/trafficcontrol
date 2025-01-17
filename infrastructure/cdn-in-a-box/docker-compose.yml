@@ -278,6 +278,8 @@ services:
     hostname: origin
     volumes:
       - shared:/shared
+    environment:      
+      HOSTNAMES4DNSENTRY: "example"
 
 
   # enroller provides a way to register component instances with traffic_ops

@@ -168,35 +168,37 @@ done
 
 to-enroll "to" ALL;
 
-while true; do
-	echo "Verifying that edge was associated to delivery service...";
+for ds in $DS_HOSTS; do
+	echo "Verifying that edge was associated to delivery service $ds...";
 
 	cachegroup="$(to-get "api/${TO_API_VERSION}/servers?hostName=edge" 2>/dev/null | jq -r -c '.response[0]|.cachegroup')"
-	xmlID="$(<<<$DS_HOSTS sed 's/ .*//g')" # Only get the first xmlID
-	ds_name=$(to-get "api/${TO_API_VERSION}/deliveryservices?xmlId=${xmlID}" 2>/dev/null | jq -r -c '.response[] | select(.cdnName == "'"$CDN_NAME"'").xmlId')
-	topology=$(to-get "api/${TO_API_VERSION}/deliveryservices?xmlId=${xmlID}" 2>/dev/null | jq -r -c '.response[] | select(.cdnName == "'"$CDN_NAME"'").topology')
-	topology_node="$(to-get "/api/${TO_API_VERSION}/topologies?name=${topology}" | jq -r '.response[].nodes[] | select(.cachegroup == "'"$cachegroup"'") | .cachegroup')"
+	while true; do
+		xmlID=$ds
+		ds_name=$(to-get "api/${TO_API_VERSION}/deliveryservices?xmlId=${xmlID}" 2>/dev/null | jq -r -c '.response[] | select(.cdnName == "'"$CDN_NAME"'").xmlId')
+		topology=$(to-get "api/${TO_API_VERSION}/deliveryservices?xmlId=${xmlID}" 2>/dev/null | jq -r -c '.response[] | select(.cdnName == "'"$CDN_NAME"'").topology')
+		topology_node="$(to-get "/api/${TO_API_VERSION}/topologies?name=${topology}" | jq -r '.response[].nodes[] | select(.cachegroup == "'"$cachegroup"'") | .cachegroup')"
 
-  if [[ -n "$topology_node" ]] ; then
-	break
-  fi
+	  	if [[ -n "$topology_node" ]] ; then
+			break
+	  	fi
 
-	sleep 2;
+		sleep 2;
+	done
 done
 
-# change loop condition to ds_index <= 3 when Delivery Service demo3 exists
-for ((ds_index = 1; ds_index <= 2; ds_index++)); do
-	ds_name="demo${ds_index}"
-	cert_file_var="X509_DEMO${ds_index}_CERT_FILE"
-	request_file_var="X509_DEMO${ds_index}_REQUEST_FILE"
-	key_file="X509_DEMO${ds_index}_KEY_FILE"
+for ds in $DS_HOSTS; do
+	ds_name="${ds,,}"
+	cert_file_var="X509_${ds_name^^}_CERT_FILE"
+	request_file_var="X509_${ds_name^^}_REQUEST_FILE"
+	key_file="X509_${ds_name^^}_KEY_FILE"
 	### Add SSL keys for delivery service
+	echo "Check for X509_${ds_name} files to exist: ${cert_file_var}, ${request_file_var}, ${key_file}";
 	until [[ -s "${!cert_file_var}" && -s "${!request_file_var}" && -s "${!key_file}" ]]; do
-		echo "Waiting on X509_DEMO${ds_index} files to exist";
+		echo "Waiting on X509_${ds_name} files to exist: ${cert_file_var}, ${request_file_var}, ${key_file}";
 		sleep 3;
 		source "$X509_CA_ENV_FILE";
 	done
-	to-add-sslkeys "$CDN_NAME" "$ds_name" "*.demo${ds_index}.mycdn.ciab.test" "${!cert_file_var}" "${!request_file_var}" "${!key_file}";
+	to-add-sslkeys "$CDN_NAME" "$ds_name" "*.${ds_name}.mycdn.ciab.test" "${!cert_file_var}" "${!request_file_var}" "${!key_file}";
 done
 
 ### Automatic Queue/Snapshot ###

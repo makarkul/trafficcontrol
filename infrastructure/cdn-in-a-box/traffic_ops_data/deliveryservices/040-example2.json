@@ -1,6 +1,6 @@
 {
-    "xmlId": "demo2",
-    "displayName": "Demo 2",
+    "xmlId": "example2",
+    "displayName": "Example 2",
     "tenant": "root",
     "protocol": 2,
     "topology": "demo1-top",
