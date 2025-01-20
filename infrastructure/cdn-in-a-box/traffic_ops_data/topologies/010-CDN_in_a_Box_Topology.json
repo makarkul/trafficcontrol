@@ -21,7 +21,7 @@
       ]
     },
     {
-      "cachegroup": "CDN_in_a_Box_Origin",
+      "cachegroup": "CDN_in_a_Box_Example",
       "parents": []
     }
   ]

@@ -265,8 +265,8 @@ services:
       - traffic_ops_data:/traffic_ops_data
       - shared:/shared
 
-  # origin provides the content to be distributed through the CDN caches
-  origin:
+  # example provides the content to be distributed through the CDN caches
+  example:
     build:
       context: .
       dockerfile: example/Dockerfile
