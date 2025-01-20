@@ -269,13 +269,13 @@ services:
   origin:
     build:
       context: .
-      dockerfile: origin/Dockerfile
+      dockerfile: example/Dockerfile
     depends_on:
       - enroller
     domainname: infra.ciab.test
     env_file:
       - variables.env
-    hostname: origin
+    hostname: example
     volumes:
       - shared:/shared
     environment:      

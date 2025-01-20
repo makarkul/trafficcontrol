@@ -21,8 +21,13 @@ set -e
 set -x
 set -m
 
+chmod +x /usr/local/sbin/insert-any-into-dns.sh
+
 set-dns.sh
 insert-self-into-dns.sh
+for hn in $HOSTNAMES4DNSENTRY; do  
+   insert-any-into-dns.sh ${hn,,}
+done
 
 source /to-access.sh
 

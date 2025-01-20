@@ -47,6 +47,7 @@ ADD example/run.sh \
 
 COPY dns/set-dns.sh \
      dns/insert-self-into-dns.sh \
+     dns/insert-any-into-dns.sh \
      /usr/local/sbin/
 
 EXPOSE 80
