@@ -1,0 +1,24 @@
+services:
+  jellyfin:
+    build:
+      context: .
+      dockerfile: jellyfin/Dockerfile
+    depends_on:
+      - enroller
+    domainname: infra.ciab.test
+    env_file:
+      - variables.env
+    hostname: jellyfin
+    user: $JELLYFIN_UID:$JELLYFIN_GID
+    volumes:
+      - $JELLYFIN_DIR/config:/config
+      - $JELLYFIN_DIR/cache:/cache
+      - type: bind
+        source: $JELLYFIN_DIR/media
+        target: /media
+    ports:
+      - "8096:8096"
+      - "8920:8920"
+    restart: 'unless-stopped'
+    entrypoint: /bin/sh
+    command: -c "/run.sh"

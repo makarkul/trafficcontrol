@@ -55,9 +55,13 @@ services:
   mid-02:
     ports:
       - "9200:80"
-  example:
+  jellyfin:
     ports:
+      - "8096:8096"
+      - "8920:8920"
       - "9300:80"
+    environment:
+      HEALTHCHECK_URL: "http://localhost:80/health"
   tchealthclient:
     ports:
       - "9400:80"

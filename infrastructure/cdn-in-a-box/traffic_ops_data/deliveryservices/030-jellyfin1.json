@@ -1,10 +1,10 @@
 {
-    "xmlId": "example1",
-    "displayName": "Example 1",
+    "xmlId": "jellyfin1",
+    "displayName": "Jellyfin server",
     "tenant": "root",
     "protocol": 2,
     "topology": "demo1-top",
-    "orgServerFqdn": "http://example.infra.ciab.test",
+    "orgServerFqdn": "http://jellyfin.infra.ciab.test",
     "cdnName": "$CDN_NAME",
     "type": "HTTP",
     "active": "ACTIVE",

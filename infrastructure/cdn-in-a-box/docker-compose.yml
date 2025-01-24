@@ -265,22 +265,26 @@ services:
       - traffic_ops_data:/traffic_ops_data
       - shared:/shared
 
-  # example provides the content to be distributed through the CDN caches
-  example:
+  jellyfin:
     build:
       context: .
-      dockerfile: example/Dockerfile
+      dockerfile: jellyfin/Dockerfile
     depends_on:
       - enroller
     domainname: infra.ciab.test
     env_file:
       - variables.env
-    hostname: example
+    hostname: jellyfin
     volumes:
       - shared:/shared
-    environment:      
-      HOSTNAMES4DNSENTRY: "example"
-
+      - $JELLYFIN_DIR/appdata:/config
+      - $JELLYFIN_DIR/cache:/cache
+      - type: bind
+        source: $JELLYFIN_DIR/media
+        target: /media
+    restart: 'unless-stopped'
+    entrypoint: /bin/sh
+    command: -c "/run.sh"
 
   # enroller provides a way to register component instances with traffic_ops
   enroller:

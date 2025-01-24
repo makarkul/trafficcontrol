@@ -21,7 +21,7 @@
       ]
     },
     {
-      "cachegroup": "CDN_in_a_Box_Example",
+      "cachegroup": "CDN_in_a_Box_Jellyfin",
       "parents": []
     }
   ]
